@@ -1,18 +1,29 @@
 'use client'
 
 import Link from 'next/link'
+import { useState } from 'react'
+import { ShoppingCart, Menu, X } from 'lucide-react'
 import { useCart } from '@/lib/cart'
 import CartDrawer from './CartDrawer'
 
 export default function Header() {
   const { itemCount, toggleCart } = useCart()
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen)
+  }
+
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false)
+  }
 
   return (
     <>
       <header className="bg-white shadow-sm border-b sticky top-0 z-40">
         <nav className="container py-4">
           <div className="flex items-center justify-between">
-            <Link href="/" className="text-2xl font-bold text-primary">
+            <Link href="/" className="text-2xl font-bold text-primary" onClick={closeMobileMenu}>
               StickerShop
             </Link>
             
@@ -40,9 +51,7 @@ export default function Header() {
                 onClick={toggleCart}
                 className="relative p-2 text-gray-700 hover:text-primary transition-colors"
               >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.5-6M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H19M17 17v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v8.001" />
-                </svg>
+                <ShoppingCart className="w-6 h-6" />
                 
                 {itemCount > 0 && (
                   <span className="absolute -top-1 -right-1 bg-primary text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
@@ -51,15 +60,65 @@ export default function Header() {
                 )}
               </button>
 
+              {/* Mobile menu button */}
               <div className="md:hidden">
-                <button className="text-gray-700 hover:text-primary">
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                  </svg>
+                <button 
+                  onClick={toggleMobileMenu}
+                  className="text-gray-700 hover:text-primary"
+                  aria-label="Toggle mobile menu"
+                >
+                  {isMobileMenuOpen ? (
+                    <X className="w-6 h-6" />
+                  ) : (
+                    <Menu className="w-6 h-6" />
+                  )}
                 </button>
               </div>
             </div>
           </div>
+
+          {/* Mobile Navigation Menu */}
+          {isMobileMenuOpen && (
+            <div className="md:hidden mt-4 border-t pt-4">
+              <div className="flex flex-col space-y-4">
+                <Link 
+                  href="/" 
+                  className="text-gray-700 hover:text-primary transition-colors"
+                  onClick={closeMobileMenu}
+                >
+                  Home
+                </Link>
+                <Link 
+                  href="/stickers" 
+                  className="text-gray-700 hover:text-primary transition-colors"
+                  onClick={closeMobileMenu}
+                >
+                  All Stickers
+                </Link>
+                <Link 
+                  href="/categories" 
+                  className="text-gray-700 hover:text-primary transition-colors"
+                  onClick={closeMobileMenu}
+                >
+                  Categories
+                </Link>
+                <Link 
+                  href="/about-us" 
+                  className="text-gray-700 hover:text-primary transition-colors"
+                  onClick={closeMobileMenu}
+                >
+                  About
+                </Link>
+                <Link 
+                  href="/shipping-info" 
+                  className="text-gray-700 hover:text-primary transition-colors"
+                  onClick={closeMobileMenu}
+                >
+                  Shipping
+                </Link>
+              </div>
+            </div>
+          )}
         </nav>
       </header>
       

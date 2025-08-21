@@ -1,19 +1,18 @@
-'use client'
-
-import { CartItem, CartState } from '@/types'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
+import { CartState, CartItem } from '@/types'
 
-interface CartStore extends CartState {
-  addItem: (item: Omit<CartItem, 'quantity'>) => void
-  removeItem: (id: string) => void
-  updateQuantity: (id: string, quantity: number) => void
-  clearCart: () => void
-  toggleCart: () => void
-  setCartOpen: (open: boolean) => void
+// Helper function to calculate total
+const calculateTotal = (items: CartItem[]): number => {
+  return items.reduce((sum: number, item: CartItem) => sum + (item.price * item.quantity), 0)
 }
 
-export const useCart = create<CartStore>()(
+// Helper function to calculate item count
+const calculateItemCount = (items: CartItem[]): number => {
+  return items.reduce((sum: number, item: CartItem) => sum + item.quantity, 0)
+}
+
+export const useCart = create<CartState>()(
   persist(
     (set, get) => ({
       items: [],
@@ -21,67 +20,61 @@ export const useCart = create<CartStore>()(
       itemCount: 0,
       isOpen: false,
 
-      addItem: (newItem) => {
-        set((state) => {
-          const existingItem = state.items.find(item => item.id === newItem.id)
-          
-          let updatedItems: CartItem[]
-          if (existingItem) {
-            updatedItems = state.items.map(item =>
-              item.id === newItem.id
-                ? { ...item, quantity: item.quantity + 1 }
-                : item
-            )
-          } else {
-            updatedItems = [...state.items, { ...newItem, quantity: 1 }]
-          }
+      addItem: (newItem: CartItem) => {
+        const state = get()
+        const existingItem = state.items.find((item: CartItem) => item.id === newItem.id)
+        
+        let updatedItems: CartItem[]
+        if (existingItem) {
+          updatedItems = state.items.map((item: CartItem) =>
+            item.id === newItem.id
+              ? { ...item, quantity: item.quantity + newItem.quantity }
+              : item
+          )
+        } else {
+          updatedItems = [...state.items, newItem]
+        }
 
-          const total = updatedItems.reduce((sum, item) => sum + (item.price * item.quantity), 0)
-          const itemCount = updatedItems.reduce((sum, item) => sum + item.quantity, 0)
+        const total = calculateTotal(updatedItems)
+        const itemCount = calculateItemCount(updatedItems)
 
-          return {
-            ...state,
-            items: updatedItems,
-            total,
-            itemCount
-          }
+        set({
+          items: updatedItems,
+          total,
+          itemCount
         })
       },
 
-      removeItem: (id) => {
-        set((state) => {
-          const updatedItems = state.items.filter(item => item.id !== id)
-          const total = updatedItems.reduce((sum, item) => sum + (item.price * item.quantity), 0)
-          const itemCount = updatedItems.reduce((sum, item) => sum + item.quantity, 0)
+      removeItem: (id: string) => {
+        const state = get()
+        const updatedItems = state.items.filter((item: CartItem) => item.id !== id)
+        const total = updatedItems.reduce((sum: number, item: CartItem) => sum + (item.price * item.quantity), 0)
+        const itemCount = updatedItems.reduce((sum: number, item: CartItem) => sum + item.quantity, 0)
 
-          return {
-            ...state,
-            items: updatedItems,
-            total,
-            itemCount
-          }
+        set({
+          items: updatedItems,
+          total,
+          itemCount
         })
       },
 
-      updateQuantity: (id, quantity) => {
+      updateQuantity: (id: string, quantity: number) => {
         if (quantity <= 0) {
           get().removeItem(id)
           return
         }
 
-        set((state) => {
-          const updatedItems = state.items.map(item =>
-            item.id === id ? { ...item, quantity } : item
-          )
-          const total = updatedItems.reduce((sum, item) => sum + (item.price * item.quantity), 0)
-          const itemCount = updatedItems.reduce((sum, item) => sum + item.quantity, 0)
+        const state = get()
+        const updatedItems = state.items.map((item: CartItem) =>
+          item.id === id ? { ...item, quantity } : item
+        )
+        const total = updatedItems.reduce((sum: number, item: CartItem) => sum + (item.price * item.quantity), 0)
+        const itemCount = updatedItems.reduce((sum: number, item: CartItem) => sum + item.quantity, 0)
 
-          return {
-            ...state,
-            items: updatedItems,
-            total,
-            itemCount
-          }
+        set({
+          items: updatedItems,
+          total,
+          itemCount
         })
       },
 
@@ -89,26 +82,22 @@ export const useCart = create<CartStore>()(
         set({
           items: [],
           total: 0,
-          itemCount: 0,
-          isOpen: false
+          itemCount: 0
         })
       },
 
-      toggleCart: () => {
-        set((state) => ({ ...state, isOpen: !state.isOpen }))
+      setOpen: (open: boolean) => {
+        const state = get()
+        set({ ...state, isOpen: open })
       },
-
-      setCartOpen: (open) => {
-        set((state) => ({ ...state, isOpen: open }))
-      }
     }),
     {
-      name: 'stickershop-cart',
+      name: 'cart-storage',
       partialize: (state) => ({
         items: state.items,
         total: state.total,
-        itemCount: state.itemCount
-      })
+        itemCount: state.itemCount,
+      }),
     }
   )
 )

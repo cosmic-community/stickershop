@@ -75,6 +75,11 @@ export interface CartState {
   total: number;
   itemCount: number;
   isOpen: boolean;
+  addItem: (item: CartItem) => void;
+  removeItem: (id: string) => void;
+  updateQuantity: (id: string, quantity: number) => void;
+  clearCart: () => void;
+  setOpen: (open: boolean) => void;
 }
 
 // Stripe interfaces
@@ -88,6 +93,15 @@ export interface CreateCheckoutSessionRequest {
     id: string;
     quantity: number;
   }[];
+}
+
+// Product Image Gallery Props
+export interface ProductImageGalleryProps {
+  images: {
+    url: string;
+    imgix_url: string;
+  }[];
+  alt: string;
 }
 
 // API response types

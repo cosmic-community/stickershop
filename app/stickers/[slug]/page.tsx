@@ -13,7 +13,7 @@ interface StickerPageProps {
 export async function generateStaticParams() {
   const stickers = await getStickers()
   
-  return stickers.map((sticker) => ({
+  return stickers.map((sticker: Sticker) => ({
     slug: sticker.slug,
   }))
 }

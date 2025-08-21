@@ -1,21 +1,23 @@
-import { getStickers, getCategories } from '@/lib/cosmic'
-import { Sticker, Category } from '@/types'
+import { getStickers, getCategories, getHeroContent } from '@/lib/cosmic'
+import { Sticker, Category, Hero } from '@/types'
 import ProductGrid from '@/components/ProductGrid'
 import CategoryShowcase from '@/components/CategoryShowcase'
 import Hero from '@/components/Hero'
 
 export default async function HomePage() {
-  const [stickers, categories] = await Promise.all([
+  const [stickers, categories, heroContent] = await Promise.all([
     getStickers(),
-    getCategories()
+    getCategories(),
+    getHeroContent()
   ]);
 
   const featuredStickers = stickers.slice(0, 6) as Sticker[];
   const allCategories = categories as Category[];
+  const heroData = heroContent as Hero | null;
 
   return (
     <div>
-      <Hero />
+      <Hero heroData={heroData} />
       
       <section className="py-16 bg-gray-50">
         <div className="container">

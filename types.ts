@@ -55,6 +55,23 @@ export interface Page extends CosmicObject {
   };
 }
 
+// Hero interface
+export interface Hero extends CosmicObject {
+  type: 'hero';
+  metadata: {
+    hero_title?: string;
+    hero_subtitle?: string;
+    hero_background_image?: {
+      url: string;
+      imgix_url: string;
+    };
+    cta_text?: string;
+    cta_link?: string;
+    secondary_button_text?: string;
+    secondary_button_link?: string;
+  };
+}
+
 // Material types
 export type StickerMaterial = 'vinyl' | 'paper' | 'holographic' | 'clear';
 
@@ -124,4 +141,8 @@ export function isCategory(obj: CosmicObject): obj is Category {
 
 export function isPage(obj: CosmicObject): obj is Page {
   return obj.type === 'pages';
+}
+
+export function isHero(obj: CosmicObject): obj is Hero {
+  return obj.type === 'hero';
 }

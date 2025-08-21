@@ -112,3 +112,36 @@ export async function getPage(slug: string) {
     throw new Error('Failed to fetch page');
   }
 }
+
+// Fetch hero content (get the first/main hero)
+export async function getHeroContent() {
+  try {
+    const response = await cosmic.objects
+      .find({ type: 'hero' })
+      .props(['id', 'title', 'slug', 'metadata'])
+      .limit(1);
+    
+    return response.objects?.[0] || null;
+  } catch (error) {
+    if (hasStatus(error) && error.status === 404) {
+      return null;
+    }
+    throw new Error('Failed to fetch hero content');
+  }
+}
+
+// Fetch hero by slug
+export async function getHero(slug: string) {
+  try {
+    const response = await cosmic.objects
+      .findOne({ type: 'hero', slug })
+      .props(['id', 'title', 'slug', 'metadata']);
+    
+    return response.object;
+  } catch (error) {
+    if (hasStatus(error) && error.status === 404) {
+      return null;
+    }
+    throw new Error('Failed to fetch hero');
+  }
+}

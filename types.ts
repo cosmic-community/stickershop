@@ -80,6 +80,7 @@ export interface CartState {
   updateQuantity: (id: string, quantity: number) => void;
   clearCart: () => void;
   setOpen: (open: boolean) => void;
+  toggleCart: () => void;
 }
 
 // Stripe interfaces

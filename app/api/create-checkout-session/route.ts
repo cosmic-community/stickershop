@@ -1,51 +1,43 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2024-06-20',
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
+  apiVersion: '2025-02-24.acacia',
 })
 
 export async function POST(request: NextRequest) {
   try {
     const { items } = await request.json()
 
-    if (!items || !Array.isArray(items)) {
-      return NextResponse.json(
-        { error: 'Items are required' },
-        { status: 400 }
-      )
-    }
-
-    const line_items = items.map((item: any) => ({
+    // Create line items from cart items
+    const lineItems = items.map((item: any) => ({
       price_data: {
         currency: 'usd',
         product_data: {
           name: item.name,
           images: item.image ? [item.image] : [],
+          metadata: {
+            id: item.id,
+            size: item.size || '',
+            material: item.material || ''
+          }
         },
-        unit_amount: Math.round(item.price * 100),
+        unit_amount: Math.round(item.price * 100), // Convert to cents
       },
       quantity: item.quantity,
     }))
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
-      line_items,
+      line_items: lineItems,
       mode: 'payment',
-      success_url: `${request.headers.get('origin') || process.env.NEXT_PUBLIC_DOMAIN || 'http://localhost:3000'}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${request.headers.get('origin') || process.env.NEXT_PUBLIC_DOMAIN || 'http://localhost:3000'}/checkout/cancel`,
+      success_url: `${request.nextUrl.origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${request.nextUrl.origin}/checkout/cancel`,
     })
 
-    if (!session.url) {
-      throw new Error('Failed to create checkout session')
-    }
-
-    return NextResponse.json({ 
-      sessionId: session.id,
-      url: session.url
-    })
+    return NextResponse.json({ id: session.id, url: session.url })
   } catch (error) {
-    console.error('Checkout session creation failed:', error)
+    console.error('Error creating checkout session:', error)
     return NextResponse.json(
       { error: 'Failed to create checkout session' },
       { status: 500 }

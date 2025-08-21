@@ -1,11 +1,11 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, Suspense } from 'react'
 import { useCart } from '@/lib/cart'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 
-export default function CheckoutSuccess() {
+function CheckoutSuccessContent() {
   const { clearCart } = useCart()
   const searchParams = useSearchParams()
   const sessionId = searchParams?.get('session_id')
@@ -67,5 +67,28 @@ export default function CheckoutSuccess() {
         </div>
       </div>
     </div>
+  )
+}
+
+function LoadingFallback() {
+  return (
+    <div className="min-h-[60vh] flex items-center justify-center">
+      <div className="text-center max-w-md mx-auto px-4">
+        <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+          <div className="w-8 h-8 border-2 border-gray-300 border-t-primary rounded-full animate-spin"></div>
+        </div>
+        <h1 className="text-2xl font-bold text-gray-900 mb-4">
+          Loading...
+        </h1>
+      </div>
+    </div>
+  )
+}
+
+export default function CheckoutSuccess() {
+  return (
+    <Suspense fallback={<LoadingFallback />}>
+      <CheckoutSuccessContent />
+    </Suspense>
   )
 }

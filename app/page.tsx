@@ -1,5 +1,5 @@
 import { getStickers, getCategories, getHeroContent } from '@/lib/cosmic'
-import { Sticker, Category, Hero } from '@/types'
+import { Sticker, Category, Hero as HeroType } from '@/types'
 import ProductGrid from '@/components/ProductGrid'
 import CategoryShowcase from '@/components/CategoryShowcase'
 import Hero from '@/components/Hero'
@@ -13,7 +13,7 @@ export default async function HomePage() {
 
   const featuredStickers = stickers.slice(0, 6) as Sticker[];
   const allCategories = categories as Category[];
-  const heroData = heroContent as Hero | null;
+  const heroData = heroContent as HeroType | null;
 
   return (
     <div>

@@ -1,24 +1,21 @@
 'use client'
 
 import { useState } from 'react'
+import { Sticker } from '@/types'
 
-interface ProductImage {
-  url: string;
-  imgix_url: string;
+export interface ProductImageGalleryProps {
+  sticker: Sticker;
 }
 
-interface ProductImageGalleryProps {
-  images: ProductImage[];
-  productName: string;
-}
+export default function ProductImageGallery({ sticker }: ProductImageGalleryProps) {
+  const [selectedImage, setSelectedImage] = useState(0)
+  
+  const images = sticker.metadata?.product_images || []
 
-export default function ProductImageGallery({ images, productName }: ProductImageGalleryProps) {
-  const [selectedImage, setSelectedImage] = useState<ProductImage | null>(images[0] || null)
-
-  if (!images || images.length === 0) {
+  if (!images.length) {
     return (
-      <div className="aspect-square bg-gray-200 rounded-lg flex items-center justify-center">
-        <span className="text-gray-500">No image available</span>
+      <div className="w-full h-96 bg-gray-200 rounded-lg flex items-center justify-center">
+        <span className="text-gray-500">No images available</span>
       </div>
     )
   }
@@ -26,32 +23,30 @@ export default function ProductImageGallery({ images, productName }: ProductImag
   return (
     <div className="space-y-4">
       {/* Main image display */}
-      <div className="aspect-square overflow-hidden rounded-lg bg-gray-100">
-        {selectedImage && (
-          <img
-            src={`${selectedImage.imgix_url}?w=800&h=800&fit=crop&auto=format,compress`}
-            alt={productName}
-            className="w-full h-full object-cover"
-          />
-        )}
+      <div className="w-full h-96 bg-gray-100 rounded-lg overflow-hidden">
+        <img
+          src={`${images[selectedImage]?.imgix_url}?w=800&h=600&fit=crop&auto=format,compress`}
+          alt={sticker.metadata?.name || sticker.title}
+          className="w-full h-full object-cover"
+        />
       </div>
 
-      {/* Thumbnail images */}
+      {/* Thumbnail navigation */}
       {images.length > 1 && (
-        <div className="flex gap-2 overflow-x-auto">
+        <div className="flex space-x-2 overflow-x-auto">
           {images.map((image, index) => (
             <button
               key={index}
-              onClick={() => setSelectedImage(image)}
-              className={`flex-shrink-0 w-20 h-20 rounded-md overflow-hidden border-2 transition-colors ${
-                selectedImage === image
-                  ? 'border-primary'
+              onClick={() => setSelectedImage(index)}
+              className={`flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-colors ${
+                selectedImage === index 
+                  ? 'border-primary' 
                   : 'border-gray-200 hover:border-gray-300'
               }`}
             >
               <img
-                src={`${image.imgix_url}?w=160&h=160&fit=crop&auto=format,compress`}
-                alt={`${productName} view ${index + 1}`}
+                src={`${image.imgix_url}?w=128&h=128&fit=crop&auto=format,compress`}
+                alt={`${sticker.metadata?.name || sticker.title} - Image ${index + 1}`}
                 className="w-full h-full object-cover"
               />
             </button>

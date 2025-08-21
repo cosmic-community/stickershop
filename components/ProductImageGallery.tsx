@@ -1,57 +1,73 @@
 'use client'
 
-import { Sticker } from '@/types'
 import { useState } from 'react'
 
-interface ProductImageGalleryProps {
-  sticker: Sticker;
+interface ProductImage {
+  url: string;
+  imgix_url: string;
 }
 
-export default function ProductImageGallery({ sticker }: ProductImageGalleryProps) {
-  const images = sticker.metadata?.product_images || [];
-  const [selectedImage, setSelectedImage] = useState(0);
+interface ProductImageGalleryProps {
+  images: ProductImage[];
+  productName: string;
+}
 
-  if (images.length === 0) {
+export default function ProductImageGallery({ images, productName }: ProductImageGalleryProps) {
+  const [selectedIndex, setSelectedIndex] = useState(0)
+
+  // Handle case where images array is empty or undefined
+  if (!images || images.length === 0) {
     return (
-      <div className="aspect-square bg-gray-200 rounded-lg flex items-center justify-center">
-        <span className="text-gray-500">No image available</span>
+      <div className="w-full aspect-square bg-gray-100 rounded-lg flex items-center justify-center">
+        <p className="text-gray-500">No images available</p>
       </div>
-    );
+    )
+  }
+
+  const selectedImage = images[selectedIndex]
+
+  // Add safety check for selectedImage
+  if (!selectedImage) {
+    return (
+      <div className="w-full aspect-square bg-gray-100 rounded-lg flex items-center justify-center">
+        <p className="text-gray-500">Image not found</p>
+      </div>
+    )
   }
 
   return (
-    <div>
-      <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden mb-4">
+    <div className="space-y-4">
+      {/* Main image */}
+      <div className="aspect-square rounded-lg overflow-hidden bg-gray-100">
         <img
-          src={`${images[selectedImage].imgix_url}?w=800&h=800&fit=crop&auto=format,compress`}
-          alt={sticker.metadata?.name || sticker.title}
+          src={`${selectedImage.imgix_url}?w=800&h=800&fit=crop&auto=format,compress`}
+          alt={productName}
           className="w-full h-full object-cover"
-          width="400"
-          height="400"
         />
       </div>
-      
+
+      {/* Thumbnail navigation - only show if more than one image */}
       {images.length > 1 && (
         <div className="grid grid-cols-4 gap-2">
           {images.map((image, index) => (
             <button
               key={index}
-              onClick={() => setSelectedImage(index)}
-              className={`aspect-square bg-gray-100 rounded-lg overflow-hidden border-2 transition-colors ${
-                index === selectedImage ? 'border-primary' : 'border-transparent hover:border-gray-300'
+              onClick={() => setSelectedIndex(index)}
+              className={`aspect-square rounded-lg overflow-hidden border-2 transition-colors ${
+                index === selectedIndex
+                  ? 'border-primary'
+                  : 'border-gray-200 hover:border-gray-300'
               }`}
             >
               <img
                 src={`${image.imgix_url}?w=200&h=200&fit=crop&auto=format,compress`}
-                alt={`${sticker.metadata?.name || sticker.title} - Image ${index + 1}`}
+                alt={`${productName} view ${index + 1}`}
                 className="w-full h-full object-cover"
-                width="100"
-                height="100"
               />
             </button>
           ))}
         </div>
       )}
     </div>
-  );
+  )
 }

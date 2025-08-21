@@ -42,9 +42,9 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <a href="mailto:support@stickershop.com" className="text-gray-300 hover:text-white transition-colors">
+                <Link href="/contact" className="text-gray-300 hover:text-white transition-colors">
                   Contact Us
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

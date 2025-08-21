@@ -40,6 +40,9 @@ export default function Header() {
               <Link href="/about-us" className="text-gray-700 hover:text-primary transition-colors">
                 About
               </Link>
+              <Link href="/contact" className="text-gray-700 hover:text-primary transition-colors">
+                Contact
+              </Link>
               <Link href="/shipping-info" className="text-gray-700 hover:text-primary transition-colors">
                 Shipping
               </Link>
@@ -108,6 +111,13 @@ export default function Header() {
                   onClick={closeMobileMenu}
                 >
                   About
+                </Link>
+                <Link 
+                  href="/contact" 
+                  className="text-gray-700 hover:text-primary transition-colors"
+                  onClick={closeMobileMenu}
+                >
+                  Contact
                 </Link>
                 <Link 
                   href="/shipping-info" 

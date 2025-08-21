@@ -26,27 +26,27 @@ export default function Hero({ heroData }: HeroProps) {
 
   return (
     <section 
-      className="bg-gradient-to-br from-primary to-blue-600 text-white"
+      className="bg-gradient-to-br from-primary to-blue-600 text-white min-h-[600px] flex items-center"
       style={sectionStyle}
     >
       <div className="container py-24">
         <div className="max-w-3xl">
-          <h1 className="text-5xl md:text-6xl font-bold mb-6">
+          <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
             {title}
           </h1>
-          <p className="text-xl mb-8 text-blue-100">
+          <p className="text-xl mb-8 text-blue-100 leading-relaxed">
             {subtitle}
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
             <Link 
               href={ctaLink}
-              className="bg-white text-primary px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-colors text-center"
+              className="bg-white text-primary px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-colors text-center shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
             >
               {ctaText}
             </Link>
             <Link 
               href={secondaryButtonLink}
-              className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-primary transition-colors text-center"
+              className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-primary transition-colors text-center backdrop-blur-sm hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200"
             >
               {secondaryButtonText}
             </Link>

@@ -58,6 +58,38 @@ export interface Page extends CosmicObject {
 // Material types
 export type StickerMaterial = 'vinyl' | 'paper' | 'holographic' | 'clear';
 
+// Cart interfaces
+export interface CartItem {
+  id: string;
+  slug: string;
+  name: string;
+  price: number;
+  quantity: number;
+  image?: string;
+  size?: string;
+  material?: string;
+}
+
+export interface CartState {
+  items: CartItem[];
+  total: number;
+  itemCount: number;
+  isOpen: boolean;
+}
+
+// Stripe interfaces
+export interface CheckoutSession {
+  id: string;
+  url: string;
+}
+
+export interface CreateCheckoutSessionRequest {
+  items: {
+    id: string;
+    quantity: number;
+  }[];
+}
+
 // API response types
 export interface CosmicResponse<T> {
   objects: T[];

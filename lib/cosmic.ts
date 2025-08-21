@@ -77,13 +77,20 @@ export async function getCategory(slug: string) {
   }
 }
 
-// Fetch stickers by category
-export async function getStickersByCategory(categoryId: string) {
+// Fetch stickers by category slug
+export async function getStickersByCategory(categorySlug: string) {
   try {
+    // First get the category to get its ID
+    const category = await getCategory(categorySlug);
+    if (!category) {
+      return [];
+    }
+
+    // Query stickers using the category ID
     const response = await cosmic.objects
       .find({ 
         type: 'stickers',
-        'metadata.category': categoryId
+        'metadata.category': category.id
       })
       .props(['id', 'title', 'slug', 'metadata'])
       .depth(1);

@@ -24,7 +24,7 @@ export default function Header() {
         <nav className="container py-4">
           <div className="flex items-center justify-between">
             <Link href="/" className="text-2xl font-bold text-primary" onClick={closeMobileMenu}>
-              StickerShop
+              Peel Good
             </Link>
             
             <div className="hidden md:flex items-center space-x-8">

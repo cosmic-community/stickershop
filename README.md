@@ -1,8 +1,8 @@
-# StickerShop - Premium Online Sticker Store
+# Peel Good - Premium Online Sticker Store
 
-![StickerShop Preview](https://imgix.cosmicjs.com/bccfbd40-7ea5-11f0-8dcc-651091f6a7c0-photo-1425082661705-1834bfd09dca-1755791073973.jpg?w=1200&h=300&fit=crop&auto=format,compress)
+![Peel Good Preview](https://imgix.cosmicjs.com/bccfbd40-7ea5-11f0-8dcc-651091f6a7c0-photo-1425082661705-1834bfd09dca-1755791073973.jpg?w=1200&h=300&fit=crop&auto=format,compress)
 
-A modern, responsive e-commerce website for Peel Good Co, showcasing their premium sticker collection with a clean design and intuitive shopping experience.
+A modern, responsive e-commerce website for Peel Good, showcasing their premium sticker collection with a clean design and intuitive shopping experience.
 
 ## Features
 
@@ -30,7 +30,7 @@ This application was built using the following prompts to generate the content s
 
 ### Code Generation Prompt
 
-> Create a website for a company Peel Good Co that sells stickers online
+> Create a website for a company Peel Good that sells stickers online
 
 The app has been tailored to work with your existing Cosmic content structure and includes all the features requested above.
 
@@ -55,7 +55,7 @@ The app has been tailored to work with your existing Cosmic content structure an
 1. Clone the repository:
 ```bash
 git clone <repository-url>
-cd sticker-shop
+cd peel-good
 ```
 
 2. Install dependencies:

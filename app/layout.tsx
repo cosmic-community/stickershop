@@ -5,7 +5,7 @@ import Footer from '@/components/Footer'
 import CosmicBadge from '@/components/CosmicBadge'
 
 export const metadata: Metadata = {
-  title: 'StickerShop - Premium Stickers Online',
+  title: 'Peel Good - Premium Stickers Online',
   description: 'Discover unique, high-quality stickers for laptops, water bottles, and more. Premium vinyl and paper materials with fast shipping.',
   keywords: 'stickers, laptop stickers, water bottle stickers, vinyl stickers, custom stickers',
 }
